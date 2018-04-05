@@ -6,7 +6,7 @@ import { ITileCoordinates } from "./tile-coordinates";
 /**
  * List all tile coordinates that covers the given bounding box and range of z.
  */
-export function getListOfTilesInBBox(bbox: IBBox, maxZ: number, minZ: number = 0): ITileCoordinates[] {
+export function getListOfTilesInBBox(bbox: IBBox, maxZ: number, minZ: number = 0, tms: boolean = false): ITileCoordinates[] {
     const result: ITileCoordinates[] = [];
     for (let z = minZ; z <= maxZ; z += 1) {
         const minX = lng2x(bbox.minLng, z);
@@ -15,6 +15,9 @@ export function getListOfTilesInBBox(bbox: IBBox, maxZ: number, minZ: number = 0
         const minY = lat2y(bbox.maxLat, z);
         for (let x = minX; x <= maxX; x += 1) {
             for (let y = minY; y <= maxY; y += 1) {
+                if (tms) {
+                  y = Math.pow(2, z) - y - 1;
+                }
                 result.push({z, x, y});
             }
         }
